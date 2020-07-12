@@ -1,0 +1,3 @@
+[submodule "octicons"]
+	path = octicons
+	url = https://github.com/primer/octicons
