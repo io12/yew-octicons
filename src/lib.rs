@@ -103,12 +103,13 @@ impl From<Icon> for Html {
     /// macro.
     fn from(icon: Icon) -> Self {
         let big = icon.size >= 24;
+        let viewbox_size = if big { 24 } else { 16 };
         let path = icon.kind.path(big);
         html! {
             <svg
                 width=icon.size
                 height=icon.size
-                viewBox=format!("0 0 {0} {0}", icon.size)
+                viewBox=format!("0 0 {0} {0}", viewbox_size)
                 fill="currentColor">
 
                 <path fill-rule="evenodd" d=path />
