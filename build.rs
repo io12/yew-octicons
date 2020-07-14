@@ -42,9 +42,19 @@ fn main() {
         .into_iter()
         .collect::<Vec<String>>();
 
-    let icon_kind_enum_inner = icon_kinds_camel_case
-        .iter()
-        .map(|kind| format_ident!("{}", kind));
+    let icon_kind_enum_inner = icon_kinds_camel_case.iter().map(|kind| {
+        let svg_url = "https://raw.githubusercontent.com/primer/octicons/master/icons/";
+        let svg_html = format!(
+            "<img src='{0}{1}-16.svg' /> <img src='{0}{1}-24.svg' />",
+            svg_url,
+            kind.to_kebab_case(),
+        );
+        let kind = format_ident!("{}", kind);
+        quote! {
+            #[doc = #svg_html]
+            #kind,
+        }
+    });
 
     let path_match_arms = icon_kinds_camel_case.iter().map(|kind| {
         let kind_ident = format_ident!("{}", kind);
@@ -58,7 +68,7 @@ fn main() {
 
     let code = quote! {
         pub enum IconKind {
-            #(#icon_kind_enum_inner),*
+            #(#icon_kind_enum_inner)*
         }
 
         impl IconKind {
