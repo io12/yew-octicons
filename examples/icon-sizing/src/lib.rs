@@ -42,6 +42,8 @@ impl Component for App {
                 <br />
 
                 { Icon::new_sized(IconKind::Rocket, self.size) }
+                { Icon::new_sized(IconKind::Alert, self.size) }
+                { Icon::new_sized(IconKind::FileBinary, self.size) }
             </div>
         }
     }
