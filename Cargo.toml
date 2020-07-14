@@ -3,6 +3,11 @@ name = "yew-octicons"
 version = "0.1.0"
 authors = ["Benjamin Levy <blevy@protonmail.com>"]
 edition = "2018"
+description = "Easy support for Octicons in yew"
+repository = "https://github.com/io12/yew-octicons"
+readme = "README.md"
+keywords = ["yew", "octicons", "icons", "wasm"]
+license = "MIT"
 
 [build-dependencies]
 heck = "0.3.1"
