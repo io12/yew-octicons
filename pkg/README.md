@@ -2,7 +2,7 @@
 
 A `yew-octicons` example.
 
-## [Live Demo](https://io12.github.io/yew-octicons)
+## [Live Demo](https://io12.github.io/yew-octicons/)
 
 ## Building
 
