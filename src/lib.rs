@@ -1,3 +1,23 @@
+#![warn(missing_docs)]
+
+//! `yew_octicons` is an easy interface for using
+//! [Octicons](https://primer.style/octicons/) in [yew](https://yew.rs)
+//! projects.
+//!
+//! ## Example
+//!
+//! ```
+//! use yew::html;
+//! use yew_octicons::Icon;
+//! use yew_octicons::IconKind;
+//!
+//! let code = html! {
+//!     <span>
+//!         { Icon::new(IconKind::Alert) }
+//!     </span>
+//! };
+//! ```
+
 mod generated;
 
 pub use generated::IconKind;
