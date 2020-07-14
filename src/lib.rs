@@ -35,7 +35,7 @@ impl From<Icon> for Html {
                 viewBox=format!("0 0 {0} {0}", icon.size)
                 fill="currentColor">
 
-                { path }
+                <path fill-rule="evenodd" d=path />
             </svg>
         }
     }

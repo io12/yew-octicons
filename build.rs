@@ -5,22 +5,23 @@ use heck::KebabCase;
 use quote::format_ident;
 use quote::quote;
 
-fn path_from_icon_kind(kind: &str, big: bool) -> proc_macro2::TokenStream {
+fn path_from_icon(kind: &str, big: bool) -> String {
     let size = if big { 24 } else { 16 };
     let file_path = format!("octicons/icons/{}-{}.svg", kind.to_kebab_case(), size);
     println!("{}", file_path);
     let file_content = match std::fs::read_to_string(file_path) {
         Ok(content) => content,
         // Hopefully this doesn't loop forever
-        Err(_) => return path_from_icon_kind(kind, !big),
+        Err(_) => return path_from_icon(kind, !big),
     };
     scraper::Html::parse_fragment(&file_content)
         .select(&scraper::Selector::parse("path").unwrap())
         .next()
         .unwrap()
-        .html()
-        .parse()
+        .value()
+        .attr("d")
         .unwrap()
+        .to_string()
 }
 
 fn main() {
@@ -47,24 +48,21 @@ fn main() {
 
     let path_match_arms = icon_kinds_camel_case.iter().map(|kind| {
         let kind_ident = format_ident!("{}", kind);
-        let path_small = path_from_icon_kind(kind, false);
-        let path_big = path_from_icon_kind(kind, true);
+        let path_small = path_from_icon(kind, false);
+        let path_big = path_from_icon(kind, true);
         quote! {
-            (IconKind::#kind_ident, false) => html!(#path_small),
-            (IconKind::#kind_ident, true) => html!(#path_big),
+            (IconKind::#kind_ident, false) => #path_small,
+            (IconKind::#kind_ident, true) => #path_big,
         }
     });
 
     let code = quote! {
-        use yew::html::Html;
-        use yew::html;
-
         pub enum IconKind {
             #(#icon_kind_enum_inner),*
         }
 
         impl IconKind {
-            pub(crate) fn path(self, big: bool) -> Html {
+            pub(crate) fn path(self, big: bool) -> &'static str {
                 match (self, big) {
                     #(#path_match_arms)*
                 }
