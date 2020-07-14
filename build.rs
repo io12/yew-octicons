@@ -67,11 +67,16 @@ fn main() {
     });
 
     let code = quote! {
+        /// Enum storing all the Octicons
         pub enum IconKind {
             #(#icon_kind_enum_inner)*
         }
 
         impl IconKind {
+            /// Given whether or not to use the big version of this icon, get a
+            /// string with the `d` attribute on the `<path>` tag of the icon's
+            /// SVG. If an icon does not exist for the requested size, fall back
+            /// to the other size.
             pub(crate) fn path(self, big: bool) -> &'static str {
                 match (self, big) {
                     #(#path_match_arms)*
