@@ -6,12 +6,28 @@ use heck::KebabCase;
 use quote::format_ident;
 use quote::quote;
 
+/// Get the size of an icon in pixels
+///
+/// ## Parameters:
+///   * `big` - whether the icon is the big variant
+fn icon_size(big: bool) -> usize {
+    if big {
+        24
+    } else {
+        16
+    }
+}
+
 /// Given an icon kind and whether or not to use the big version, get a string
-/// with the `d` attribute on the `<path>` tag of the icon's SVG. If an icon does
-/// not exist for the requested size, fall back to the other size.
-fn path_from_icon(kind: &str, big: bool) -> String {
-    let size = if big { 24 } else { 16 };
-    let file_path = format!("octicons/icons/{}-{}.svg", kind.to_kebab_case(), size);
+/// with the `d` attribute on the `<path>` tag of the icon's SVG. If an icon
+/// does not exist for the requested size, fall back to the other size. The
+/// returned `bool` indicates whether the big version was used.
+fn path_from_icon(kind: &str, big: bool) -> (String, bool) {
+    let file_path = format!(
+        "octicons/icons/{}-{}.svg",
+        kind.to_kebab_case(),
+        icon_size(big)
+    );
     println!("{}", file_path);
     let file_content = match std::fs::read_to_string(file_path) {
         Ok(content) => content,
@@ -19,14 +35,12 @@ fn path_from_icon(kind: &str, big: bool) -> String {
         // Hopefully this doesn't loop forever.
         Err(_) => return path_from_icon(kind, !big),
     };
-    scraper::Html::parse_fragment(&file_content)
+    let path = scraper::Html::parse_fragment(&file_content)
         .select(&scraper::Selector::parse("path").unwrap())
-        .next()
-        .unwrap()
-        .value()
-        .attr("d")
-        .unwrap()
-        .to_string()
+        .map(|path| path.value().attr("d").unwrap().to_string())
+        .collect::<Vec<String>>()
+        .join(" ");
+    (path, big)
 }
 
 fn main() {
@@ -56,18 +70,22 @@ fn main() {
     // Iterator over the variants of `IconKind`
     let icon_kind_enum_inner = icon_kinds_camel_case.iter().map(|kind| {
         // Create doc comment with both SVG sizes
+        let path_small = path_from_icon(kind, false);
+        let path_big = path_from_icon(kind, true);
         let svg_html = format!(
             concat!(
-                "<svg width='16' height='16' viewBox='0 0 16 16' fill='currentColor'>",
-                "    <path fill-rule='evenodd' d='{}'/>",
+                "<svg width='16' height='16' viewBox='0 0 {0} {0}' fill='currentColor'>",
+                "    <path fill-rule='evenodd' d='{1}'/>",
                 "</svg>",
                 "",
-                "<svg width='24' height='24' viewBox='0 0 24 24' fill='currentColor'>",
-                "    <path fill-rule='evenodd' d='{}'/>",
+                "<svg width='24' height='24' viewBox='0 0 {2} {2}' fill='currentColor'>",
+                "    <path fill-rule='evenodd' d='{3}'/>",
                 "</svg>",
             ),
-            path_from_icon(kind, false),
-            path_from_icon(kind, true)
+            icon_size(path_small.1),
+            path_small.0,
+            icon_size(path_big.1),
+            path_big.0,
         );
         let kind = format_ident!("{}", kind);
         quote! {
@@ -79,11 +97,11 @@ fn main() {
     // Iterator over match arms in `IconKind::path()`
     let path_match_arms = icon_kinds_camel_case.iter().map(|kind| {
         let kind_ident = format_ident!("{}", kind);
-        let path_small = path_from_icon(kind, false);
-        let path_big = path_from_icon(kind, true);
+        let (path_small, small_is_big) = path_from_icon(kind, false);
+        let (path_big, big_is_big) = path_from_icon(kind, true);
         quote! {
-            (IconKind::#kind_ident, false) => #path_small,
-            (IconKind::#kind_ident, true) => #path_big,
+            (IconKind::#kind_ident, false) => (#path_small, #small_is_big),
+            (IconKind::#kind_ident, true) => (#path_big, #big_is_big),
         }
     });
 
@@ -98,8 +116,9 @@ fn main() {
             /// Given whether or not to use the big version of this icon, get a
             /// string with the `d` attribute on the `<path>` tag of the icon's
             /// SVG. If an icon does not exist for the requested size, fall back
-            /// to the other size.
-            pub(crate) fn path(self, big: bool) -> &'static str {
+            /// to the other size. The returned `bool` indicates whether the big
+            /// version was used.
+            pub(crate) fn path(self, big: bool) -> (&'static str, bool) {
                 match (self, big) {
                     #(#path_match_arms)*
                 }

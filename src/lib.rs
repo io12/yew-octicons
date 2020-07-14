@@ -103,8 +103,10 @@ impl From<Icon> for Html {
     /// macro.
     fn from(icon: Icon) -> Self {
         let big = icon.size >= 24;
+        let (path, big) = icon.kind.path(big);
+        // The `viewBox` size should be the actual size of the icon, not the
+        // requested size.
         let viewbox_size = if big { 24 } else { 16 };
-        let path = icon.kind.path(big);
         html! {
             <svg
                 width=icon.size
