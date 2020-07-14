@@ -56,11 +56,18 @@ fn main() {
     // Iterator over the variants of `IconKind`
     let icon_kind_enum_inner = icon_kinds_camel_case.iter().map(|kind| {
         // Create doc comment with both SVG sizes
-        let svg_url = "https://raw.githubusercontent.com/primer/octicons/master/icons/";
         let svg_html = format!(
-            "<img src='{0}{1}-16.svg' /> <img src='{0}{1}-24.svg' />",
-            svg_url,
-            kind.to_kebab_case(),
+            concat!(
+                "<svg width='16' height='16' viewBox='0 0 16 16' fill='currentColor'>",
+                "    <path fill-rule='evenodd' d='{}'/>",
+                "</svg>",
+                "",
+                "<svg width='24' height='24' viewBox='0 0 24 24' fill='currentColor'>",
+                "    <path fill-rule='evenodd' d='{}'/>",
+                "</svg>",
+            ),
+            path_from_icon(kind, false),
+            path_from_icon(kind, true)
         );
         let kind = format_ident!("{}", kind);
         quote! {
