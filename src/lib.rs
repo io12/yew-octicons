@@ -5,26 +5,81 @@ pub use generated::IconKind;
 use yew::html;
 use yew::html::Html;
 
+/// An Octicon with size information. This can be used in yew's `html!` macro.
+///
+/// ```
+/// use yew::html;
+/// use yew_octicons::Icon;
+/// use yew_octicons::IconKind;
+///
+/// let code = html! {
+///     <span>
+///         { Icon::new(IconKind::Alert) }
+///     </span>
+/// };
+/// ```
 pub struct Icon {
     kind: IconKind,
     size: usize,
 }
 
 impl Icon {
+    /// Create a default-sized 16px icon
+    ///
+    /// ```
+    /// use yew::html;
+    /// use yew_octicons::Icon;
+    /// use yew_octicons::IconKind;
+    ///
+    /// let code = html! {
+    ///     <span>
+    ///         { Icon::new(IconKind::Alert) }
+    ///     </span>
+    /// };
+    /// ```
     pub fn new(kind: IconKind) -> Self {
         Self::new_sized(kind, 16)
     }
 
+    /// Create a big 24px icon
+    ///
+    /// ```
+    /// use yew::html;
+    /// use yew_octicons::Icon;
+    /// use yew_octicons::IconKind;
+    ///
+    /// let code = html! {
+    ///     <span>
+    ///         { Icon::new_big(IconKind::Alert) }
+    ///     </span>
+    /// };
+    /// ```
     pub fn new_big(kind: IconKind) -> Self {
         Self::new_sized(kind, 24)
     }
 
+    /// Create an icon of an arbitrary size. The `size` is the side length of
+    /// the icon in pixels.
+    ///
+    /// ```
+    /// use yew::html;
+    /// use yew_octicons::Icon;
+    /// use yew_octicons::IconKind;
+    ///
+    /// let code = html! {
+    ///     <span>
+    ///         { Icon::new_sized(IconKind::Alert, 50) }
+    ///     </span>
+    /// };
+    /// ```
     pub fn new_sized(kind: IconKind, size: usize) -> Self {
         Self { kind, size }
     }
 }
 
 impl From<Icon> for Html {
+    /// Convert icon to yew HTML. This allows icons to be used in yew's `html!`
+    /// macro.
     fn from(icon: Icon) -> Self {
         let big = icon.size >= 24;
         let path = icon.kind.path(big);
