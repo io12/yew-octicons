@@ -1,0 +1,15 @@
+{
+  "name": "yew-octicons-icon-sizing",
+  "collaborators": [
+    "Benjamin Levy <blevy@protonmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "yew_octicons_icon_sizing_bg.wasm",
+    "yew_octicons_icon_sizing.js",
+    "yew_octicons_icon_sizing.d.ts"
+  ],
+  "module": "yew_octicons_icon_sizing.js",
+  "types": "yew_octicons_icon_sizing.d.ts",
+  "sideEffects": false
+}
