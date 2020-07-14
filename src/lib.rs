@@ -38,6 +38,7 @@ use yew::html::Html;
 ///     </span>
 /// };
 /// ```
+#[derive(PartialEq, PartialOrd, Clone, Copy, Hash, Debug)]
 pub struct Icon {
     kind: IconKind,
     size: usize,

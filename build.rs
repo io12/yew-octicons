@@ -81,6 +81,7 @@ fn main() {
 
     let code = quote! {
         /// Enum storing all the Octicons
+        #[derive(PartialEq, PartialOrd, Clone, Copy, Hash, Debug)]
         pub enum IconKind {
             #(#icon_kind_enum_inner)*
         }
