@@ -1,4 +1,5 @@
 use std::collections::BTreeSet;
+use std::path::Path;
 
 use heck::CamelCase;
 use heck::KebabCase;
@@ -99,5 +100,9 @@ fn main() {
         }
     };
 
-    std::fs::write("src/generated.rs", code.to_string()).unwrap();
+    std::fs::write(
+        Path::new(&std::env::var("OUT_DIR").unwrap()).join("generated.rs"),
+        code.to_string(),
+    )
+    .unwrap();
 }
