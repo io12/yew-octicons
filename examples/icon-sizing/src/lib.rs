@@ -16,7 +16,7 @@ impl Component for App {
     type Properties = ();
 
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        App { link, size: 8 }
+        App { link, size: 16 }
     }
 
     fn change(&mut self, _: Self::Properties) -> bool {
@@ -36,12 +36,12 @@ impl Component for App {
         html! {
             <div>
                 <button onclick=self.link.callback(|_| Msg::Click)>
-                    { "Click me" }
+                    { "size += 4" }
                 </button>
 
                 <br />
 
-                { Icon::new_sized(IconKind::Alert, self.size) }
+                { Icon::new_sized(IconKind::Rocket, self.size) }
             </div>
         }
     }
