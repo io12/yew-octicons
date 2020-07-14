@@ -5,13 +5,17 @@ use heck::KebabCase;
 use quote::format_ident;
 use quote::quote;
 
+/// Given an icon kind and whether or not to use the big version, get a string
+/// with the `d` attribute on the `<path>` tag of the icon's SVG. If an icon does
+/// not exist for the requested size, fall back to the other size.
 fn path_from_icon(kind: &str, big: bool) -> String {
     let size = if big { 24 } else { 16 };
     let file_path = format!("octicons/icons/{}-{}.svg", kind.to_kebab_case(), size);
     println!("{}", file_path);
     let file_content = match std::fs::read_to_string(file_path) {
         Ok(content) => content,
-        // Hopefully this doesn't loop forever
+        // The icon doesn't exist for this size, so fall back to the other size.
+        // Hopefully this doesn't loop forever.
         Err(_) => return path_from_icon(kind, !big),
     };
     scraper::Html::parse_fragment(&file_content)
@@ -25,9 +29,13 @@ fn path_from_icon(kind: &str, big: bool) -> String {
 }
 
 fn main() {
+    // Sorted vector of strings containing CamelCased Octicon names
     let icon_kinds_camel_case = std::fs::read_dir("octicons/icons")
         .unwrap()
         .map(|dir_entry| {
+            // Convert each directory entry to CamelCased Octicon name. Each
+            // file name should have the format `icon-name-12.svg`, so splitting
+            // at the last hyphen is enough to get the icon name by itself.
             dir_entry
                 .unwrap()
                 .file_name()
@@ -38,11 +46,15 @@ fn main() {
                 .unwrap()
                 .to_camel_case()
         })
+        // Converting to `BTreeSet`, then `Vec`, automatically sorts and removes
+        // duplicates.
         .collect::<BTreeSet<String>>()
         .into_iter()
         .collect::<Vec<String>>();
 
+    // Iterator over the variants of `IconKind`
     let icon_kind_enum_inner = icon_kinds_camel_case.iter().map(|kind| {
+        // Create doc comment with both SVG sizes
         let svg_url = "https://raw.githubusercontent.com/primer/octicons/master/icons/";
         let svg_html = format!(
             "<img src='{0}{1}-16.svg' /> <img src='{0}{1}-24.svg' />",
@@ -56,6 +68,7 @@ fn main() {
         }
     });
 
+    // Iterator over match arms in `IconKind::path()`
     let path_match_arms = icon_kinds_camel_case.iter().map(|kind| {
         let kind_ident = format_ident!("{}", kind);
         let path_small = path_from_icon(kind, false);
