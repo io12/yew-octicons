@@ -1,30 +1,15 @@
-name: Rust
+name: Deploy example
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  tests:
-    name: Run tests
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Pull source
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-
-      - name: Run tests
-        run: cargo test
-
-  example-deploy-pages:
-    name: Deploy example to GitHub pages
+  deploy-example:
+    name: Deploy example to GitHub Pages
     runs-on: ubuntu-latest
     steps:
 
