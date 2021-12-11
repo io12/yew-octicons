@@ -1,8 +1,8 @@
 use std::collections::BTreeSet;
 use std::path::Path;
 
-use heck::CamelCase;
-use heck::KebabCase;
+use heck::ToKebabCase;
+use heck::ToPascalCase;
 use quote::format_ident;
 use quote::quote;
 
@@ -59,7 +59,7 @@ fn main() {
                 .rsplitn(2, '-')
                 .nth(1)
                 .unwrap()
-                .to_camel_case()
+                .to_pascal_case()
         })
         // Converting to `BTreeSet`, then `Vec`, automatically sorts and removes
         // duplicates.
