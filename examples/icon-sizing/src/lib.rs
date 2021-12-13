@@ -4,7 +4,6 @@ use yew_octicons::*;
 
 /// Main app component
 pub struct App {
-    link: ComponentLink<Self>,
     /// Size of icons
     size: usize,
 }
@@ -19,15 +18,15 @@ impl Component for App {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        App { link, size: 16 }
+    fn create(_: &Context<Self>) -> Self {
+        App { size: 16 }
     }
 
-    fn change(&mut self, _: Self::Properties) -> bool {
+    fn changed(&mut self, _: &Context<Self>) -> bool {
         false
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::Inc(n) => {
                 self.size += n;
@@ -36,13 +35,13 @@ impl Component for App {
         true
     }
 
-    fn view(&self) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
         // Create buttons for incrementing the icon size by certain amounts
         let buttons = (2..8)
             .map(|n| {
                 let n = 2_usize.pow(n);
                 html! {
-                    <button onclick=self.link.callback(move |_| Msg::Inc(n))>
+                    <button onclick={ ctx.link().callback(move |_| Msg::Inc(n)) }>
                         { n }
                     </button>
                 }
@@ -64,5 +63,5 @@ impl Component for App {
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    yew::start_app::<App>()
+    yew::start_app::<App>();
 }

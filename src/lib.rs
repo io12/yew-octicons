@@ -109,12 +109,12 @@ impl From<Icon> for Html {
         let viewbox_size = if big { 24 } else { 16 };
         html! {
             <svg
-                width=icon.size.to_string()
-                height=icon.size.to_string()
-                viewBox=format!("0 0 {0} {0}", viewbox_size)
+                width={ icon.size.to_string() }
+                height={ icon.size.to_string() }
+                viewBox={ format!("0 0 {0} {0}", viewbox_size) }
                 fill="currentColor">
 
-                <path fill-rule="evenodd" d=path />
+                <path fill-rule="evenodd" d={ path } />
             </svg>
         }
     }
