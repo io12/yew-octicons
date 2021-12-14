@@ -1,11 +1,11 @@
 [package]
-name = "yew-octicons-icon-sizing"
+name = "yew-octicons-example-icon-sizing"
 version = "0.1.0"
 authors = ["Benjamin Levy <blevy@protonmail.com>"]
 edition = "2018"
 
 [dependencies]
-yew-octicons = { path = "../.." }
+yew-octicons = { path = "../../yew-octicons" }
 yew = "0.19.3"
 wasm-bindgen = "0.2.64"
 

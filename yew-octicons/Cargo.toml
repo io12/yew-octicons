@@ -1,0 +1,19 @@
+[package]
+name = "yew-octicons"
+version = "0.2.0"
+authors = ["Benjamin Levy <blevy@protonmail.com>"]
+edition = "2018"
+description = "Easy support for Octicons in yew"
+repository = "https://github.com/io12/yew-octicons"
+readme = "README.md"
+keywords = ["yew", "octicons", "icons", "wasm"]
+license = "MIT"
+
+[build-dependencies]
+heck = "0.4.0"
+scraper = "0.12.0"
+quote = "1.0.9"
+proc-macro2 = "1.0.26"
+
+[dependencies]
+yew = "0.19.3"
