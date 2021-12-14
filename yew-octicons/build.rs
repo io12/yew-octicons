@@ -36,8 +36,13 @@ fn path_from_icon(kind: &str, big: bool) -> (String, bool) {
         Err(_) => return path_from_icon(kind, !big),
     };
     let path = scraper::Html::parse_fragment(&file_content)
-        .select(&scraper::Selector::parse("path").unwrap())
-        .map(|path| path.value().attr("d").unwrap().to_string())
+        .select(&scraper::Selector::parse("path").expect("Failed getting svg path"))
+        .map(|path| {
+            path.value()
+                .attr("d")
+                .expect("Failed getting svg path data")
+                .to_string()
+        })
         .collect::<Vec<String>>()
         .join(" ");
     (path, big)
@@ -46,18 +51,18 @@ fn path_from_icon(kind: &str, big: bool) -> (String, bool) {
 fn main() {
     // Sorted vector of strings containing PascalCased Octicon names
     let icon_kinds_pascal_case = std::fs::read_dir("octicons/icons")
-        .unwrap()
+        .expect("Failed reading octicons/icons directory")
         .map(|dir_entry| {
             // Convert each directory entry to PascalCased Octicon name. Each
             // file name should have the format `icon-name-12.svg`, so splitting
             // at the last hyphen is enough to get the icon name by itself.
             dir_entry
-                .unwrap()
+                .expect("Failed reading octicons/icons directory entry")
                 .file_name()
                 .into_string()
-                .unwrap()
+                .expect("Icon svg filename is not valid UTF-8")
                 .rsplit_once('-')
-                .unwrap()
+                .expect("Failed splitting filename on hyphen")
                 .0
                 .to_pascal_case()
         })
@@ -127,8 +132,9 @@ fn main() {
     };
 
     std::fs::write(
-        Path::new(&std::env::var("OUT_DIR").unwrap()).join("generated.rs"),
+        Path::new(&std::env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable"))
+            .join("generated.rs"),
         code.to_string(),
     )
-    .unwrap();
+    .expect("Failed writing generated.rs");
 }
