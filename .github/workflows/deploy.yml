@@ -25,7 +25,7 @@ jobs:
         run: wget -qO- https://github.com/thedodd/trunk/releases/download/v0.14.0/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
 
       - name: Build example
-        run: ./trunk build examples/icon-sizing/index.html
+        run: ./trunk build --public-url "/yew-octicons" --release examples/icon-sizing/index.html
 
       - name: Push to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
