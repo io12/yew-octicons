@@ -59,8 +59,8 @@ jobs:
         with:
           submodules: true
 
-      - name: Install trunk
+      - name: Download trunk
         run: wget -qO- https://github.com/thedodd/trunk/releases/download/v0.14.0/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
 
       - name: Build example
-        run: trunk build examples/icon-sizing/index.html
+        run: ./trunk build examples/icon-sizing/index.html
