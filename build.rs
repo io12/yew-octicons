@@ -56,9 +56,9 @@ fn main() {
                 .file_name()
                 .into_string()
                 .unwrap()
-                .rsplitn(2, '-')
-                .nth(1)
+                .rsplit_once('-')
                 .unwrap()
+                .0
                 .to_pascal_case()
         })
         // Converting to `BTreeSet`, then `Vec`, automatically sorts and removes
