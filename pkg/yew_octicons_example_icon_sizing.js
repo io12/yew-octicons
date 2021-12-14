@@ -308,7 +308,7 @@ async function load(module, imports) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('yew_octicons_icon_sizing_bg.wasm', import.meta.url);
+        input = new URL('yew_octicons_example_icon_sizing_bg.wasm', import.meta.url);
     }
     const imports = {};
     imports.wbg = {};
