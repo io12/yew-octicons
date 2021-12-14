@@ -5,7 +5,7 @@ authors = ["Benjamin Levy <blevy@protonmail.com>"]
 edition = "2021"
 description = "Easy support for Octicons in yew"
 repository = "https://github.com/io12/yew-octicons"
-readme = "README.md"
+readme = "../README.md"
 keywords = ["yew", "octicons", "icons", "wasm"]
 license = "MIT"
 
