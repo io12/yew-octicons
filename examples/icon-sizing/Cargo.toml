@@ -3,6 +3,7 @@ name = "yew-octicons-example-icon-sizing"
 version = "0.1.0"
 authors = ["Benjamin Levy <blevy@protonmail.com>"]
 edition = "2021"
+publish = false
 
 [dependencies]
 yew-octicons = { path = "../../yew-octicons" }
