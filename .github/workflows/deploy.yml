@@ -18,18 +18,15 @@ jobs:
         with:
           submodules: true
 
-      - name: Install wasm-pack
-        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Install trunk
+        run: wget -qO- https://github.com/thedodd/trunk/releases/download/v0.14.0/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
 
       - name: Build example
-        run: ./examples/icon-sizing/build.sh
-
-      - name: Delete pkg/.gitignore to prevent deployment from failing
-        run: rm -f ./examples/icon-sizing/static/pkg/.gitignore
+        run: trunk build examples/icon-sizing/index.html
 
       - name: Push to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: examples/icon-sizing/static
+          FOLDER: examples/icon-sizing/dist
