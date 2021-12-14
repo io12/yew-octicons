@@ -52,19 +52,26 @@ fn main() {
     // Sorted vector of strings containing PascalCased Octicon names
     let icon_kinds_pascal_case = std::fs::read_dir("octicons/icons")
         .expect("Failed reading octicons/icons directory")
-        .map(|dir_entry| {
-            // Convert each directory entry to PascalCased Octicon name. Each
-            // file name should have the format `icon-name-12.svg`, so splitting
-            // at the last hyphen is enough to get the icon name by itself.
-            dir_entry
+        .filter_map(|dir_entry| {
+            // Convert directory entry to a String of the filename
+            let filename = dir_entry
                 .expect("Failed reading octicons/icons directory entry")
                 .file_name()
                 .into_string()
-                .expect("Icon svg filename is not valid UTF-8")
+                .expect("Icon svg filename is not valid UTF-8");
+
+            // Each file name should have the format `icon-name-12.svg`,
+            // so splitting at the last hyphen is enough to get the icon name by itself.
+            let (kind, size_dot_svg) = filename
                 .rsplit_once('-')
-                .expect("Failed splitting filename on hyphen")
-                .0
-                .to_pascal_case()
+                .expect("Failed splitting filename on hyphen");
+
+            // Convert Octicon name to PascalCase.
+            // Only sizes 16 and 24 are supported.
+            match size_dot_svg {
+                "16.svg" | "24.svg" => Some(kind.to_pascal_case()),
+                _ => None,
+            }
         })
         // Converting to `BTreeSet`, then `Vec`, automatically sorts and removes
         // duplicates.
