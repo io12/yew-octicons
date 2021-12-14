@@ -6,12 +6,12 @@ A `yew-octicons` example.
 
 ## Building
 
-Install [`wasm-pack`](https://rustwasm.github.io/wasm-pack/), then run
+Install [`trunk`](https://trunkrs.dev/), then run
 
 ```sh
-./build.sh
+trunk build
 ```
 
 ## Running
 
-Use a web server, such as [`miniserve`](https://github.com/svenstaro/miniserve) to serve `static/`.
+Use a web server, such as [`miniserve`](https://github.com/svenstaro/miniserve) to serve `dist/`.
