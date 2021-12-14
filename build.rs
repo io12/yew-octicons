@@ -44,11 +44,11 @@ fn path_from_icon(kind: &str, big: bool) -> (String, bool) {
 }
 
 fn main() {
-    // Sorted vector of strings containing CamelCased Octicon names
-    let icon_kinds_camel_case = std::fs::read_dir("octicons/icons")
+    // Sorted vector of strings containing PascalCased Octicon names
+    let icon_kinds_pascal_case = std::fs::read_dir("octicons/icons")
         .unwrap()
         .map(|dir_entry| {
-            // Convert each directory entry to CamelCased Octicon name. Each
+            // Convert each directory entry to PascalCased Octicon name. Each
             // file name should have the format `icon-name-12.svg`, so splitting
             // at the last hyphen is enough to get the icon name by itself.
             dir_entry
@@ -68,7 +68,7 @@ fn main() {
         .collect::<Vec<String>>();
 
     // Iterator over the variants of `IconKind`
-    let icon_kind_enum_inner = icon_kinds_camel_case.iter().map(|kind| {
+    let icon_kind_enum_inner = icon_kinds_pascal_case.iter().map(|kind| {
         // Create doc comment with both SVG sizes
         let path_small = path_from_icon(kind, false);
         let path_big = path_from_icon(kind, true);
@@ -95,7 +95,7 @@ fn main() {
     });
 
     // Iterator over match arms in `IconKind::path()`
-    let path_match_arms = icon_kinds_camel_case.iter().map(|kind| {
+    let path_match_arms = icon_kinds_pascal_case.iter().map(|kind| {
         let kind_ident = format_ident!("{}", kind);
         let (path_small, small_is_big) = path_from_icon(kind, false);
         let (path_big, big_is_big) = path_from_icon(kind, true);
