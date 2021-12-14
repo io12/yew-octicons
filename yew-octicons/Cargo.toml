@@ -12,8 +12,8 @@ license = "MIT"
 [build-dependencies]
 heck = "0.4.0"
 scraper = "0.12.0"
-quote = "1.0.9"
-proc-macro2 = "1.0.26"
+quote = "1.0.10"
+proc-macro2 = "1.0.33"
 
 [dependencies]
 yew = "0.19.3"
