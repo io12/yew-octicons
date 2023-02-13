@@ -111,7 +111,7 @@ impl From<Icon> for Html {
             <svg
                 width={ icon.size.to_string() }
                 height={ icon.size.to_string() }
-                viewBox={ format!("0 0 {0} {0}", viewbox_size) }
+                viewBox={ format!("0 0 {viewbox_size} {viewbox_size}") }
                 fill="currentColor">
 
                 <path fill-rule="evenodd" d={ path } />

@@ -28,7 +28,7 @@ fn path_from_icon(kind: &str, big: bool) -> (String, bool) {
         kind.to_kebab_case(),
         icon_size(big)
     );
-    println!("{}", file_path);
+    println!("{file_path}");
     let file_content = match std::fs::read_to_string(file_path) {
         Ok(content) => content,
         // The icon doesn't exist for this size, so fall back to the other size.
