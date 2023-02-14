@@ -22,7 +22,7 @@ impl Component for App {
         App { size: 16 }
     }
 
-    fn changed(&mut self, _: &Context<Self>) -> bool {
+    fn changed(&mut self, _: &Context<Self>, _: &()) -> bool {
         false
     }
 
@@ -63,5 +63,5 @@ impl Component for App {
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    yew::start_app::<App>();
+    yew::Renderer::<App>::new().render();
 }

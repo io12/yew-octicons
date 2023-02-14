@@ -16,4 +16,4 @@ quote = "1.0.10"
 proc-macro2 = "1.0.33"
 
 [dependencies]
-yew = "0.19.3"
+yew = "0.20.0"
