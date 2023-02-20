@@ -10,10 +10,10 @@ keywords = ["yew", "octicons", "icons", "wasm"]
 license = "MIT"
 
 [build-dependencies]
-heck = "0.4.0"
+heck = "0.4.1"
 scraper = "0.14.0"
-quote = "1.0.10"
-proc-macro2 = "1.0.33"
+quote = "1.0.23"
+proc-macro2 = "1.0.51"
 
 [dependencies]
 yew = "0.20.0"
